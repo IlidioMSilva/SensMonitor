@@ -1,3 +1,9 @@
+/*
+ * Author: IlidioMSilva
+ * Project: Sensor integration with Zephyr
+ * Note: Educational/portfolio example
+ */
+
 /**
  * @brief UART manager for NodeMCU ESP32.
  *
