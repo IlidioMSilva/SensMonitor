@@ -1,0 +1,83 @@
+/ {
+    aliases {
+        dht11int = &dht11_in;
+        bme280 = &bme280_0;
+        rtc = &ds3231m;
+        spi-slave = &spi1;
+        rdy-pin = &ready_pin;
+        myuart = &uart0; /* for NodeMCU communication */
+    };
+
+    dht11_keys: dht11_keys {
+        compatible = "gpio-keys";
+        dht11_in: dht11_in {
+            gpios = <&gpio0 13 GPIO_ACTIVE_HIGH>;
+        };
+    };
+
+    ready_keys: ready_keys {
+        compatible = "gpio-keys";
+        ready_pin: ready_pin {
+            gpios = <&gpio0 3 GPIO_ACTIVE_HIGH>;
+        };
+    };
+};
+
+/* I2C0 for BME280 and RTC */
+&i2c0 {
+    compatible = "nordic,nrf-twi";
+    status = "okay";
+    clock-frequency = <I2C_BITRATE_STANDARD>;
+
+    bme280_0: bme280@76 {
+        compatible = "bosch,bme280";
+        reg = <0x76>;
+        status = "okay";
+    };
+
+    ds3231m: rtc@68 {
+        compatible = "maxim,ds3231";
+        reg = <0x68>;
+        status = "okay";
+    };
+};
+
+/* SPI1 configured as SPIS (slave) Just for test */
+&spi1 {
+    compatible = "nordic,nrf-spis";
+    status = "okay";
+    pinctrl-0 = <&spi1_slave_default>;
+    pinctrl-names = "default", "sleep";
+    def-char = <0xFF>;
+    max-frequency = <1000000>;
+    easydma-maxcnt-bits = <8>;
+    cs-gpios = <&gpio0 25 GPIO_ACTIVE_LOW>;
+};
+
+/* SPI1 configured as SPIS (slave) Just for test */
+&pinctrl {
+    spi1_slave_default: spi1_slave_default {
+        group1 {
+            psels = <
+                NRF_PSEL(SPIS_SCK, 0, 22)
+                NRF_PSEL(SPIS_MOSI, 0, 23)
+                NRF_PSEL(SPIS_MISO, 0, 24)
+                NRF_PSEL(SPIS_CSN, 0, 25)
+            >;
+        };
+    };
+};
+
+/* UART0 Setup for NodeMCU (logs moved to RTT) */
+&uart0 {
+    status = "okay";
+    current-speed = <115200>;
+    pinctrl-0 = <&uart0_default>;
+    pinctrl-1 = <&uart0_sleep>;
+    pinctrl-names = "default", "sleep";
+};
+
+/* Disable SPI2 so its pins are free if needed */
+&spi2 {
+    status = "disabled";
+};

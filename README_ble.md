@@ -1,7 +1,7 @@
 # Bluetooth Low Energy (BLE)
 
 ## Overview
-The BLE stack in this project is built on top of the **Zephyr Bluetooth subsystem**.  
+The BLE stack in this project is built on top of the Zephyr Bluetooth subsystem.  
 The nRF52832 runs as a **peripheral** device, advertising a custom service that exposes environmental data and configurable thresholds to a central device (e.g., Raspberry Pi, smartphone).  
 
 The BLE module provides:
@@ -33,7 +33,7 @@ The BLE module provides:
 - **Thresholds**  
   - UUID: `12345678-1234-5678-1234-56789abc0003`  
   - Properties: *Read, Write*  
-  - Format: Array of 4 values → `[temp_min, temp_max, hum_min, hum_max]` (each 8-bit)  
+  - Format: Array of 4 values → `[temp_min, temp_max, hum_min, hum_max]` (each 8-bit)
 
 ---
 
@@ -110,4 +110,21 @@ The advertising packet typically includes:
 - Built with **Zephyr v3.7.99** and **nRF Connect SDK v2.9.1**.  
 - BLE stack uses the **SoftDevice Controller (SDC)**.  
 - Notifications are currently enabled for **temperature** and **humidity**.  
-- Architecture is modular → additional services (e.g., DHT11, RTC, Wi-Fi bridge) can be added with the same design pattern.  
+- Architecture is modular → additional services (e.g., DHT11, RTC, Wi-Fi bridge) can be added with the same design pattern. 
+
+### Some Example images
+
+-NRFConnect app
+
+<img src="images/BLE_SERVICES2.jpg" alt="Sample Image" style="width:50%; height:auto;">
+
+
+<img src="images/BLE_SERVICES.jpg" alt="Sample Image" style="width:50%; height:auto;">
+
+
+<img src="images/BLE_SERVICES3.png" alt="Sample Image" style="width:50%; height:auto;">
+
+
+- APP log on RTT
+
+<img src="images/BLE_LOG.png" alt="Sample Image" style="width:50%; height:auto;">

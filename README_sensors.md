@@ -109,18 +109,49 @@ Connected to **I²C0** bus:
 
 ---
 
+## Thresholds & Concurrency
+
+### Threshold Structures
+
+Thresholds are stored in `sensor_thresholds_t`, containing min/max values for all sensors.  
+They can be updated via **BLE services** (`bme280_service`) or **SPI commands** (`spi_manager`).
+
+### Concurrent Updates & Mutex
+
+A **mutex (`k_mutex`)** protects the threshold structure.  
+
+- Only one thread can update thresholds at a time, ensuring atomic writes.  
+- BLE and SPI updates can occur simultaneously without corrupting memory.  
+- If two updates happen at the same time, the **last write wins**.
+
+### Snapshot Consistency
+
+- The sensor **background thread** updates `sensor_snapshot_t` every `SENSOR_READ_INTERVAL_SECONDS`.  
+- Reads via SPI or BLE always fetch the **latest consistent snapshot**.  
+- **Test mode** (`USE_DUMMY_DATA` / `TEST_SPI_MANAGER`) can simulate sensor values or provide a fixed payload for testing.
+
+---
+
 ## Execution Flow
 
 1. **Initialization**  
    - `sensors_init()` initializes DHT11, BME280, and DS3231M.  
-   - If enabled, dummy data mode bypasses hardware access.  
+   - Thresholds initialized with default values.
+   - Dummy data mode optional for testing.  
 
 2. **Background Thread**  
    - A dedicated thread (`sensor_thread`) wakes every `SENSOR_READ_INTERVAL_SECONDS` (default: 60 s).  
    - Reads all sensors sequentially and updates the global snapshot.  
 
-3. **Data Retrieval**  
-   - Other modules call `sensor_data_get_snapshot(sensor_snapshot_t *dest)` to fetch the last measurements.  
+3. **Threshold Updates** (if needed):
+   - BLE thread or WIFI via SPI/NODEMCU thread acquires mutex.
+   - Updates threshold structure.
+   - Releases mutex.
 
-4. **Logging**  
-   - Sensor readings and failures are logged via Zephyr’s `LOG_INF` and `LOG_ERR` APIs.  
+4. **Data Retrieval**  
+   - Any modules can call `sensor_data_get_snapshot(sensor_snapshot_t *dest)` to fetch the last measurements.
+   - Retrieves latest sensor values.
+   - Snapshot reads are consistent even during concurrent threshold updates.
+
+5. **Logging**  
+   - Sensor readings and failures are logged.  

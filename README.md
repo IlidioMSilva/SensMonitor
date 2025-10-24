@@ -2,7 +2,7 @@
 
 > In current development
 
-SensMonitor is a personal project where the goal is to apply concepts and technologies I have learned throughout my professional career. Currently, there is no final prototype implemented. The architecture presented here is my initial design and may undergo slight changes as development progresses.
+SensMonitor is a personal project where the goal is to apply concepts and technologies I have learned throughout my professional career. Currently, there is no final prototype implemented. The architecture presented here is my initial design and may take slight changes as development progresses.
 
 > **Note:** This repository is public for overview and documentation purposes. Access to the full source code is **available upon request**. Please contact the author to obtain it.
 
@@ -38,15 +38,17 @@ Development is being done using the hardware currently available, which may requ
 To reproduce or extend this project, the following are required:
 
 ### Hardware
+
 - **nRF52DK (nRF52832)** development kit  
 - **ESP32 (NodeMCU)** module for Wi-Fi communication  
 - **DHT11** sensor (temperature & humidity)  
 - **BME280** sensor (temperature, humidity, and pressure)  
 - **RTC DS3231M** module for timestamping  
-- Optional: **Buzzer** for threshold alerts  
+- Optional/Future: **Buzzer** for threshold alerts and epaper display
 - USB to UART adapter (e.g., FTDI) for debugging
 
 ### Software
+
 - **nRF Connect SDK v2.9.1** with **Zephyr v3.7.99**  
 - **VSCode** with nRF Connect extensions (recommended)  
 - **ESP-IDF** (for ESP32 firmware development)  
@@ -60,7 +62,7 @@ To reproduce or extend this project, the following are required:
 
 The figure below shows the current architecture of the project:
 
-![System Architecture](images/Arqui2025-09-18.png)
+![System Architecture](images/arquitecturageral2.png)
 
 1. **Sensors and Microcontroller**
    - Two sensors (DHT11 and BME280) are periodically read by a **nRF52 microcontroller**.  
@@ -87,12 +89,17 @@ The figure below shows the current architecture of the project:
 
 - [BLE & Sensor Services](README_ble.md) – Details on BLE manager, sensor services, and notifications.  
 - [Sensors](README_sensors.md) – Details on DHT11, BME280, RTC drivers, and shared data handling.  
+- [Wifi](README_wifi.md) – Details on how the Wifi communication is done.  
 
 ---
 
 ## Project Roadmap / Priorities
 
-1. **Test SPI communication** between nRF52 and ESP32.  
+1. **Implement communication** between nRF52 and ESP32.
+   * Threshod command between nRF52 and ESP32.
+   * Persistent storage for thresholds on nRF52.
+   * Additional sensors (pressure, CO2, etc.) using reserved buffer bytes.
+   * Error detection with checksum byte at the end of packet.
 2. **Implement Wi-Fi communication** on ESP32 to send data via REST API.  
 3. **Develop REST API** for storing and serving sensor data.  
 4. **Create Grafana dashboard** for visualization of temperature, humidity, and alerts.  
@@ -107,3 +114,4 @@ The figure below shows the current architecture of the project:
 - The project is **modular**: new sensors or services can be added easily.  
 - Timer-based readings ensure non-blocking periodic updates.  
 - The architecture may evolve as new technologies or improvements are added.
+
