@@ -17,7 +17,7 @@ The project combines concepts from **embedded systems**, **software engineering*
   - **BME280** (temperature, humidity, and pressure)  
   - **RTC DS3231M** (timestamping)  
 - **BLE peripheral** with custom services and notifications  
-- Planned **Wi-Fi communication** via ESP32 and SPI link  
+- Planned **Wi-Fi communication** via ESP32 and UART link  
 - **REST API** (Java + Spring Boot) for sensor data handling  
 - **Grafana dashboard** for visualization  
 - Modular architecture with clear separation of concerns  
@@ -78,7 +78,7 @@ The figure below shows the current architecture of the project:
    - A **Grafana dashboard** visualizes sensor readings in real time.  
 
 4. **Future Enhancements**
-   - Deployment with **Docker** and potentially **Kubernetes** for scalability and containerized management.  
+   - Deployment with **Docker** and potentially **Kubernetes** for scalability and containerized management. (Almost done. Request for access) 
    - Additional sensors or new communication protocols may be added.
 
 > Each module of the project will have a dedicated README explaining its implementation in detail.
@@ -114,4 +114,5 @@ The figure below shows the current architecture of the project:
 - The project is **modular**: new sensors or services can be added easily.  
 - Timer-based readings ensure non-blocking periodic updates.  
 - The architecture may evolve as new technologies or improvements are added.
+- This repository may not contain all parts of the project that have already been developed. If there is a specific part you wish to consult, you can request it from the author.
 
